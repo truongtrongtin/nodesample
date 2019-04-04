@@ -1,0 +1,19 @@
+version: "3"
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/nodesample
+      - /nodesample/node_modules
+    depends_on:
+      - db
+  db:
+    image: postgres:11.2-alpine
+    ports:
+      - "27017:27017"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+volumes:
+  postgres:
