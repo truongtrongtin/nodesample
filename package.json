@@ -1,0 +1,18 @@
+{
+  "name": "nodesample",
+  "version": "1.0.0",
+  "description": "A sample Koa app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Tin Truong <truongtrongtin0305@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^2.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
+}
