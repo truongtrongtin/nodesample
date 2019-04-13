@@ -6,10 +6,11 @@ RUN mkdir -p $APP_PATH
 WORKDIR $APP_PATH
 
 COPY package*.json ./
-RUN npm install
+
+RUN apk --no-cache add --virtual builds-deps build-base python \
+  && npm i \
+  && apk del builds-deps build-base python
 
 COPY . .
-
-EXPOSE 3000
 
 CMD [ "npm", "start" ]
