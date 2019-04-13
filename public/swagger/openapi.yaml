@@ -1,0 +1,134 @@
+openapi: 3.0.2
+info:
+  title: Koa Sample App
+  version: 1.0.0
+servers:
+- url: /api/v1
+paths:
+  /user/authenticate:
+    post:
+      tags:
+      - user
+      summary: Sign in user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+            example:
+              username: demousername
+              password: demopassword
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              example:
+                accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJ0b2tlbiI6InF3ZXJ0eXVpb3AiLCJ1c2VybmFtZSI6ImRlbW91c2VybmFtZSIsImVtYWlsIjoiZGVtb2VtYWlsQGV4YW1wbGUuY29tIiwiaXNBZG1pbiI6ZmFsc2V9LCJpYXQiOjE1NTY3NzA0OTUsImV4cCI6MTU4ODMyODA5NX0.yK0410W3vBrn56isg1hJHgdhszDtFOqQsGcqrMMo2Ro
+                refreshToken: x8THax4ItyEkp41kDGOijL4TU7EfihBMKUmDrW9H8Swq_RORjl3z69dGweJGaFNW
+        401:
+          content:
+            application/json:
+              example:
+                status: 401
+                message: INVALID_CREDENTIALS
+        404:
+          content:
+            application/json:
+              example:
+                status: 404
+                message: INVALID_DATA
+
+  /user/signup:
+    post:
+      tags:
+      - user
+      summary: Create new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: integer
+                password:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: email
+            example:
+              username: tin
+              password: password
+              firstName: Tin
+              lastName: Truong
+              email: truongtrongtin0305@gmail.com
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              example:
+                accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJ0b2tlbiI6InF3ZXJ0eXVpb3AiLCJ1c2VybmFtZSI6ImRlbW91c2VybmFtZSIsImVtYWlsIjoiZGVtb2VtYWlsQGV4YW1wbGUuY29tIiwiaXNBZG1pbiI6ZmFsc2V9LCJpYXQiOjE1NTY3NzA0OTUsImV4cCI6MTU4ODMyODA5NX0.yK0410W3vBrn56isg1hJHgdhszDtFOqQsGcqrMMo2Ro
+                refreshToken: x8THax4ItyEkp41kDGOijL4TU7EfihBMKUmDrW9H8Swq_RORjl3z69dGweJGaFNW
+        401:
+          content:
+            application/json:
+              example:
+                status: 401
+                message: INVALID_CREDENTIALS
+        404:
+          content:
+            application/json:
+              example:
+                status: 404
+                message: INVALID_DATA
+
+  /notes/{id}:
+    get:
+      tags:
+      - note
+      summary: Show note by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 3
+      security:
+        - bearerAuth: []
+
+  /notes:
+    get:
+      tags:
+      - note
+      summary: List notes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 3
+      security:
+        - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
