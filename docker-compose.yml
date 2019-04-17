@@ -17,12 +17,10 @@ services:
       - "9229:9229"
     volumes:
       - .:/nodesample
-      - node_modules:/nodesample/node_modules
     depends_on:
       - db
       - redis
 
 volumes:
-  node_modules:
   postgres:
   redis:
