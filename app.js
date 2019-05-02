@@ -2,7 +2,6 @@
 
 require("dotenv").config();
 
-// const env = process.env.NODE_ENV || 'development'
 const port = process.env.PORT || 3001;
 
 const Koa = require("koa");
@@ -37,43 +36,49 @@ app.use(
   })
 );
 
-//Let's log each successful interaction. We'll also log each error - but not here,
-//that's be done in the json error-handling middleware
-app.use(async (ctx, next) => {
-  try {
-    await next();
-    logger.info(
-      ctx.method + " " + ctx.url + " RESPONSE: " + ctx.response.status
-    );
-  } catch (error) {}
-});
-
-// Serve api document
-app.use(serve("public/swagger"));
-
-// Modify response structure
-app.use(async (ctx, next) => {
-  try {
-    await next();
-    ctx.body = { data: ctx.body };
-  } catch (err) {
-    // will only respond with JSON
-    ctx.status = err.statusCode || err.status || 500;
-    ctx.body = {
-      error: {
-        code: ctx.status,
-        message: err.message
-      }
-    };
-  }
-});
-
 // return response time in X-Response-Time header
 app.use(async function responseTime(ctx, next) {
   const t1 = Date.now();
   await next();
   const t2 = Date.now();
   ctx.set("X-Response-Time", Math.ceil(t2 - t1) + "ms");
+});
+
+// Serve api document
+app.use(serve("public/swagger"));
+
+// Use JSEND format for response json
+app.use(async (ctx, next) => {
+  try {
+    await next();
+    // Log each successful interaction
+    logger.info(
+      ctx.method + " " + ctx.url + " RESPONSE: " + ctx.response.status
+    );
+    ctx.body = {
+      status: "success",
+      data: ctx.body
+    };
+  } catch (err) {
+    ctx.status = err.status || 500;
+    logger.info(
+      ctx.method + " " + ctx.url + " RESPONSE: " + ctx.response.status
+    );
+
+    if (ctx.status >= 500) {
+      ctx.body = {
+        status: "error",
+        message: err.message
+      };
+    } else {
+      ctx.body = {
+        status: "fail",
+        code: ctx.status,
+        data: ctx.body,
+        message: err.message
+      };
+    }
+  }
 });
 
 //For cors with options

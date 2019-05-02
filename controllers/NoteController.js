@@ -77,7 +77,7 @@ class NoteController {
 
     try {
       let [result] = await note.store();
-      ctx.body = { message: "SUCCESS", id: result };
+      ctx.body = { id: result };
     } catch (error) {
       console.log(error);
       ctx.throw(400, "INVALID_DATA");
@@ -112,7 +112,6 @@ class NoteController {
 
     try {
       await note.save();
-      ctx.body = { message: "SUCCESS" };
     } catch (error) {
       console.log(error);
       ctx.throw(400, "INVALID_DATA");
@@ -129,11 +128,10 @@ class NoteController {
 
     //Grab the user //If it's not their note - error out
     const user = new User(ctx.state.user);
-    if (note.userId !== user.id) ctx.throw(401, "UNAUTHORIZED");
+    if (note.userId !== user.id) ctx.throw(429, "UNAUTHORIZED");
 
     try {
       await note.destroy();
-      ctx.body = { message: "SUCCESS" };
     } catch (error) {
       console.log(error);
       ctx.throw(400, "INVALID_DATA");

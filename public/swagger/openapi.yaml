@@ -31,19 +31,23 @@ paths:
           content:
             application/json:
               example:
-                accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJ0b2tlbiI6InF3ZXJ0eXVpb3AiLCJ1c2VybmFtZSI6ImRlbW91c2VybmFtZSIsImVtYWlsIjoiZGVtb2VtYWlsQGV4YW1wbGUuY29tIiwiaXNBZG1pbiI6ZmFsc2V9LCJpYXQiOjE1NTY3NzA0OTUsImV4cCI6MTU4ODMyODA5NX0.yK0410W3vBrn56isg1hJHgdhszDtFOqQsGcqrMMo2Ro
-                refreshToken: x8THax4ItyEkp41kDGOijL4TU7EfihBMKUmDrW9H8Swq_RORjl3z69dGweJGaFNW
+                status: success
+                data:
+                  accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJ0b2tlbiI6InF3ZXJ0eXVpb3AiLCJ1c2VybmFtZSI6ImRlbW91c2VybmFtZSIsImVtYWlsIjoiZGVtb2VtYWlsQGV4YW1wbGUuY29tIiwiaXNBZG1pbiI6ZmFsc2V9LCJpYXQiOjE1NTY3NzA0OTUsImV4cCI6MTU4ODMyODA5NX0.yK0410W3vBrn56isg1hJHgdhszDtFOqQsGcqrMMo2Ro
+                  refreshToken: x8THax4ItyEkp41kDGOijL4TU7EfihBMKUmDrW9H8Swq_RORjl3z69dGweJGaFNW
         401:
           content:
             application/json:
               example:
-                status: 401
+                status: fail
+                code: 401
                 message: INVALID_CREDENTIALS
         404:
           content:
             application/json:
               example:
-                status: 404
+                status: fail
+                code: 404
                 message: INVALID_DATA
 
   /user/signup:
@@ -68,7 +72,8 @@ paths:
                 lastName:
                   type: string
                 email:
-                  type: email
+                  type: string
+                  format: email
             example:
               username: tin
               password: password
@@ -87,13 +92,13 @@ paths:
           content:
             application/json:
               example:
-                status: 401
+                code: 401
                 message: INVALID_CREDENTIALS
         404:
           content:
             application/json:
               example:
-                status: 404
+                code: 404
                 message: INVALID_DATA
 
   /notes/{id}:
@@ -108,6 +113,38 @@ paths:
           schema:
             type: integer
           example: 3
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Note'
+              example:
+                status: success
+                data:
+                  id: 3
+                  userId: 1
+                  title: This is note title
+                  content: This is note content
+        401:
+          content:
+            application/json:
+              example:
+                status: fail
+                code: 401
+                message: AUTHENTICATION_ERROR
+        404:
+          content:
+            application/json:
+              example:
+                status: fail
+                code: 404
+                message: NOT_FOUND
       security:
         - bearerAuth: []
 
@@ -123,10 +160,45 @@ paths:
           schema:
             type: integer
           example: 3
+      responses:
+        200:
+          content:
+            application/json:
+              example:
+                status: success
+                data:
+                  accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoxLCJ0b2tlbiI6InF3ZXJ0eXVpb3AiLCJ1c2VybmFtZSI6ImRlbW91c2VybmFtZSIsImVtYWlsIjoiZGVtb2VtYWlsQGV4YW1wbGUuY29tIiwiaXNBZG1pbiI6ZmFsc2V9LCJpYXQiOjE1NTY3NzA0OTUsImV4cCI6MTU4ODMyODA5NX0.yK0410W3vBrn56isg1hJHgdhszDtFOqQsGcqrMMo2Ro
+                  refreshToken: x8THax4ItyEkp41kDGOijL4TU7EfihBMKUmDrW9H8Swq_RORjl3z69dGweJGaFNW
+        401:
+          content:
+            application/json:
+              example:
+                status: fail
+                code: 401
+                message: AUTHENTICATION_ERROR
+        404:
+          content:
+            application/json:
+              example:
+                status: fail
+                code: 404
+                message: NOT_FOUND
       security:
         - bearerAuth: []
 
 components:
+  schemas:
+    Note:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http

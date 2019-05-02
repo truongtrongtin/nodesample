@@ -131,7 +131,7 @@ class UserController {
       }
 
       //And return our response.
-      ctx.body = { message: "SUCCESS", id: result };
+      ctx.body = { id: result };
     } catch (error) {
       ctx.throw(400, "INVALID_DATA");
     }
@@ -300,7 +300,6 @@ class UserController {
           updatedAt: dateFormat(new Date(), "YYYY-MM-DD HH:mm:ss")
         })
         .where({ username: request.username });
-      ctx.body = { message: "SUCCESS" };
     } catch (error) {
       ctx.throw(400, "INVALID_DATA");
     }
@@ -321,7 +320,6 @@ class UserController {
           username: ctx.state.user.username,
           refreshToken: request.refreshToken
         });
-      ctx.body = { message: "SUCCESS" };
     } catch (error) {
       ctx.throw(400, "INVALID_DATA");
     }
@@ -408,8 +406,6 @@ class UserController {
     if (tokenIsValid !== -1) {
       ctx.throw(400, "RESET_TOKEN_EXPIRED");
     }
-
-    ctx.body = { message: "SUCCESS" };
   }
 
   async resetPassword(ctx) {
@@ -464,7 +460,6 @@ class UserController {
     } catch (error) {
       ctx.throw(400, "INVALID_DATA");
     }
-    ctx.body = { message: "SUCCESS" };
   }
 
   async private(ctx) {
