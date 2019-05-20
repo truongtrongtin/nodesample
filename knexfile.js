@@ -1,8 +1,5 @@
 //I only want migrations, rollbacks, and seeds to run when the NODE_ENV is specified
 //in the knex seed/migrate command. Knex will error out if it is not specified.
-if (!process.env.NODE_ENV) {
-  throw new Error("NODE_ENV not set");
-}
 
 require("dotenv").config();
 
@@ -18,10 +15,10 @@ module.exports = {
       database: process.env.DB_DATABASE + "_testing"
     },
     migrations: {
-      directory: "./db/migrations"
+      directory: "./src/db/migrations"
     },
     seeds: {
-      directory: "./db/seeds/dev"
+      directory: "./src/db/seeds/dev"
     }
   },
   development: {
@@ -35,10 +32,10 @@ module.exports = {
       database: process.env.DB_DATABASE + "_development"
     },
     migrations: {
-      directory: "./db/migrations"
+      directory: "./src/db/migrations"
     },
     seeds: {
-      directory: "./db/seeds/dev"
+      directory: "./src/db/seeds/dev"
     }
   },
   production: {
@@ -52,7 +49,7 @@ module.exports = {
       database: process.env.DB_DATABASE + "_production"
     },
     migrations: {
-      directory: "./db/migrations"
+      directory: "./src/db/migrations"
     }
   }
 };

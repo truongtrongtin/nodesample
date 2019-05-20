@@ -1,25 +1,20 @@
-version: "3.7"
+version: '3.7'
 services:
   db:
-    image: postgres:11.2-alpine
+    image: postgres:11.4-alpine
     volumes:
       - postgres:/var/lib/postgresql/data
 
-  adminer:
-    image: adminer
-    ports:
-      - 3002:8080
-
   redis:
-    image: redis:5.0.4-alpine
+    image: redis:alpine
     volumes:
       - redis:/data
 
   app:
     build: .
     ports:
-      - "3001:3001"
-      - "9229:9229"
+      - 3001:3001
+      - 9229:9229
     volumes:
       - .:/nodesample
       - node_modules:/nodesample/node_modules
